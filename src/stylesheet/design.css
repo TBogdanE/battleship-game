@@ -1,3 +1,37 @@
+:root {
+  font-family: "Alata", sans-serif;
+  font-size: 16px;
+  --body: rgb(138, 205, 234);
+  --text: rgb(8, 76, 97);
+  --text2: rgb(241, 211, 2);
+  --element: rgb(8, 76, 97);
+  --element-active: rgb(54, 59, 64);
+  --element-hover: rgb(53, 59, 65);
+  --error: rgb(251, 80, 18);
+}
+
 body {
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  margin: 0;
+  background-color: var(--body);
+}
+
+#page-title {
+  grid-area: 1 / 6 / 2 / 11;
+  color: var(--text);
+  font-size: 2em;
+  text-align: center;
+  padding: 1em;
+}
+
+#player-box {
+  grid-area: 3 / 2 / 9 / 8;
+  background-color: red;
+}
+
+#computer-box {
+  grid-area: 3 / 9 / 9 / 15;
   background-color: red;
 }
