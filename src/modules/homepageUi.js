@@ -1,3 +1,5 @@
+import { startGame } from "./";
+
 const renderPlayerBox = () => {
   const box = document.getElementById("player-box");
   for (let i = 0; i < 10; i++) {
@@ -26,4 +28,9 @@ const renderComputerBox = () => {
   }
 };
 
-export { renderComputerBox, renderPlayerBox };
+const btnStartGame = () => {
+  const button = document.getElementById("btn-start-game");
+  button.addEventListener("click", startGame);
+};
+
+export { renderComputerBox, renderPlayerBox, btnStartGame };
