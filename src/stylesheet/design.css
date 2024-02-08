@@ -56,7 +56,7 @@ body {
 }
 
 #btn-start-game {
-  grid-area: 9 / 8 / 10 /9;
+  grid-area: 9 / 8 / 10 / 9;
   background-color: var(--body);
   color: var(--text);
   border: 0.2em solid var(--element);
@@ -67,6 +67,22 @@ body {
 }
 
 #btn-start-game:hover {
+  background-color: var(--element-hover);
+  color: var(--text2);
+}
+
+#btn-rotate-boat {
+  grid-area: 2 / 8 / 3 / 9;
+  background-color: var(--body);
+  color: var(--text);
+  border: 0.2em solid var(--element);
+  border-radius: 10px;
+  align-self: center;
+  padding: 0.5em;
+  transition: 0.2s ease-in-out;
+}
+
+#btn-rotate-boat:hover {
   background-color: var(--element-hover);
   color: var(--text2);
 }

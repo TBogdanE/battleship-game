@@ -1,5 +1,9 @@
 import { placeBoats } from "./gameBoard";
 
+const VERTICAL = "Vertical";
+const HORIZONTAL = "Horizontal";
+let ROTATION = VERTICAL;
+
 const renderPlayerBox = () => {
   const box = document.getElementById("player-box");
   for (let i = 0; i < 10; i++) {
@@ -36,10 +40,25 @@ const btnStartGame = () => {
     if (page.contains(button)) {
       page.removeChild(button);
       button.removeEventListener("click", handleBtn);
+      rotateBoatBtn();
     }
   };
 
   button.addEventListener("click", handleBtn);
+};
+
+const rotateBoatBtn = () => {
+  const page = document.querySelector("body");
+  const btn = document.createElement("button");
+  btn.id = "btn-rotate-boat";
+  btn.textContent = ROTATION;
+
+  btn.addEventListener("click", () => {
+    ROTATION = ROTATION === HORIZONTAL ? VERTICAL : HORIZONTAL;
+    btn.textContent = ROTATION;
+  });
+
+  page.appendChild(btn);
 };
 
 export { renderComputerBox, renderPlayerBox, btnStartGame };
