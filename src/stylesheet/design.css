@@ -26,25 +26,47 @@ body {
   padding: 1em;
 }
 
-#player-box {
+.gameboard {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
+  background-color: var(--body);
+  margin: 0.3em solid var(--element);
+}
+#player-box {
   grid-area: 3 / 2 / 9 / 8;
-  background-color: red;
 }
 
 #computer-box {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: repeat(10, 1fr);
   grid-area: 3 / 9 / 9 / 15;
-  background-color: red;
 }
 
 .box-div {
-  background-color: white;
-  border: 0.1em solid green;
+  background-color: var(--body);
+  border: 0.1em solid var(--element);
   width: 1fr;
   height: 1fr;
+  transition: 0.15s ease-in-out;
+}
+
+.box-div:hover {
+  border: 0.3em solid var(--text2);
+  border-radius: 8px;
+  scale: 1.1;
+}
+
+#btn-start-game {
+  grid-area: 9 / 8 / 10 /9;
+  background-color: var(--body);
+  color: var(--text);
+  border: 0.2em solid var(--element);
+  border-radius: 10px;
+  align-self: center;
+  padding: 0.5em;
+  transition: 0.2s ease-in-out;
+}
+
+#btn-start-game:hover {
+  background-color: var(--element-hover);
+  color: var(--text2);
 }
