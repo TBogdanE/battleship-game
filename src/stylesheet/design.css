@@ -7,7 +7,9 @@
   --element: rgb(8, 76, 97);
   --element-active: rgb(54, 59, 64);
   --element-hover: rgb(53, 59, 65);
-  --error: rgb(251, 80, 18);
+  --good-place: rgb(128, 185, 24);
+  --good-place-hover: rgb(203, 243, 122);
+  --wrong: rgb(251, 80, 18);
 }
 
 body {
