@@ -27,11 +27,24 @@ body {
 }
 
 #player-box {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
   grid-area: 3 / 2 / 9 / 8;
   background-color: red;
 }
 
 #computer-box {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
   grid-area: 3 / 9 / 9 / 15;
   background-color: red;
+}
+
+.box-div {
+  background-color: white;
+  border: 0.1em solid green;
+  width: 1fr;
+  height: 1fr;
 }
