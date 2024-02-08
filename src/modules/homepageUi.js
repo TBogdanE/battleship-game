@@ -1,4 +1,4 @@
-import { startGame } from "./";
+import { placeBoats } from "./gameBoard";
 
 const renderPlayerBox = () => {
   const box = document.getElementById("player-box");
@@ -29,8 +29,17 @@ const renderComputerBox = () => {
 };
 
 const btnStartGame = () => {
+  const page = document.querySelector("body");
   const button = document.getElementById("btn-start-game");
-  button.addEventListener("click", startGame);
+  const handleBtn = () => {
+    placeBoats();
+    if (page.contains(button)) {
+      page.removeChild(button);
+      button.removeEventListener("click", handleBtn);
+    }
+  };
+
+  button.addEventListener("click", handleBtn);
 };
 
 export { renderComputerBox, renderPlayerBox, btnStartGame };
