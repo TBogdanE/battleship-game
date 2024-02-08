@@ -25,51 +25,63 @@ const checkValidPlace = (size) => {
   const box = document.getElementById("player-box");
 
   box.addEventListener("mouseover", (event) => {
-    const target = event.target;
-    const row = parseInt(target.getAttribute("row"));
-    const col = parseInt(target.getAttribute("col"));
-    let element = null;
-    if (ROTATION === VERTICAL) {
-      if (size + row > 10) {
-        target.style.backgroundColor = "red";
-        return;
-      }
-      for (let i = 0; i < size; i++) {
-        element = findElementByRowCol(i + row, col);
-        element.style.backgroundColor = "green";
-      }
-    } else if (ROTATION === HORIZONTAL) {
-      if (size + col > 10) {
-        target.style.backgroundColor = "red";
-        return;
-      }
-      for (let i = 0; i < size; i++) {
-        element = findElementByRowCol(row, col + i);
-        element.style.backgroundColor = "green";
-      }
-    }
-    console.log(row, col);
+    handleMouseOver(event, size);
   });
-
   box.addEventListener("mouseout", (event) => {
-    const target = event.target;
-    const row = parseInt(target.getAttribute("row"));
-    const col = parseInt(target.getAttribute("col"));
-    let element = null;
-
-    if (ROTATION === VERTICAL) {
-      for (let i = 0; i < size; i++) {
-        element = findElementByRowCol(i + row, col);
-        element.style.backgroundColor = "transparent"; // Reset to original state
-      }
-    } else if (ROTATION === HORIZONTAL) {
-      for (let i = 0; i < size; i++) {
-        element = findElementByRowCol(row, col + i);
-        element.style.backgroundColor = "transparent";
-      }
-    }
+    handleMouseOut(event, size);
   });
-  return true;
+};
+
+const handleMouseOver = (event, size) => {
+  const target = event.target;
+  const row = parseInt(target.getAttribute("row"));
+  const col = parseInt(target.getAttribute("col"));
+  let element = null;
+  handleHover(target, row, col, size, element);
+};
+
+const handleMouseOut = (event, size) => {
+  const target = event.target;
+  const row = parseInt(target.getAttribute("row"));
+  const col = parseInt(target.getAttribute("col"));
+  let element = null;
+  handleHoverDeletion(row, col, size, element);
+};
+
+const handleHover = (target, row, col, size, element) => {
+  if (ROTATION === VERTICAL) {
+    if (size + row > 10) {
+      target.style.backgroundColor = "var(--wrong)";
+      return;
+    }
+    for (let i = 0; i < size; i++) {
+      element = findElementByRowCol(i + row, col);
+      element.style.backgroundColor = "var(--good-place-hover)";
+    }
+  } else if (ROTATION === HORIZONTAL) {
+    if (size + col > 10) {
+      target.style.backgroundColor = "var(--wrong)";
+      return;
+    }
+    for (let i = 0; i < size; i++) {
+      element = findElementByRowCol(row, col + i);
+      element.style.backgroundColor = "var(--good-place-hover)";
+    }
+  }
+};
+
+const handleHoverDeletion = (row, col, size, element) => {
+  if (ROTATION === VERTICAL) {
+    for (let i = 0; i < size; i++) {
+      element = findElementByRowCol(i + row, col);
+      element.style.backgroundColor = "transparent";
+    }
+  } else if (ROTATION === HORIZONTAL) {
+    for (let i = 0; i < size; i++) {
+      element = findElementByRowCol(row, col + i);
+      element.style.backgroundColor = "transparent";
+    }
+  }
 };
 
 const findElementByRowCol = (row, col) => {
