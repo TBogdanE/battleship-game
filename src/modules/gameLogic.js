@@ -19,3 +19,6 @@ class Boat {
 
   isSunk() {}
 }
+
+const player = new Player();
+const computerPlayer = new Computer();
