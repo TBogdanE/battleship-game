@@ -1,112 +1,125 @@
 import { player, computerPlayer, Boat } from "./players";
 import { VERTICAL, HORIZONTAL, ROTATION } from "./homepageUi";
 
+class settings {
+  constructor() {
+    this.size = 0;
+    this.handleMouseOver = null;
+    this.handleMouseOut = null;
+  }
+}
+
+const gameSettings = new settings();
+
 //makes user place boats in order
-const placePlayerBoats = () => {
-  placeCarrierBoat();
-  // placeBatleship();
-  //placeDestroyer();
-  //placeSubmarine();
-  //placePatrolBoat();
-  // placeBoats();
+const placePlayerBoats = async () => {
+  await placeCarrierBoat();
+  await placeBatleship();
+  //await placeDestroyer();
+  //await placeSubmarine();
+  //await placePatrolBoat();
+  //await placeBoats();
 };
 
 //place carriere boat
 const placeCarrierBoat = () => {
-  checkValidPlace(5);
+  gameSettings.size = 5;
+  checkValidPlace();
+};
+
+const placeBatleship = () => {
+  console.log("next");
 };
 
 //place the boat on the gameboard
-const placeBoat = () => {
-  console.log("sa");
+const placeBoat = (size, pos) => {
+  const newBoat = new Boat(size, pos);
+  player.boats.push(newBoat);
+  console.log(newBoat.position);
+  console.log(player.boats);
+  return newBoat;
 };
 
 //randomly places computer boats
 const placeComputerRandomBoats = () => {};
 
 //checks if the place user want to add the boat is valid
-const checkValidPlace = (size) => {
+const checkValidPlace = () => {
   const box = document.getElementById("player-box");
 
-  box.addEventListener("mouseover", (event) => {
-    handleMouseOver(event, size);
-  });
-  box.addEventListener("mouseout", (event) => {
-    handleMouseOut(event, size);
-  });
-};
+  //gets the area where the mouse hovers
+  gameSettings.handleMouseOver = (event) => {
+    const target = event.target;
+    const row = parseInt(target.getAttribute("row"));
+    const col = parseInt(target.getAttribute("col"));
+    let element = null;
 
-//gets the area where the mouse hovers
-const handleMouseOver = (event, size) => {
-  const target = event.target;
-  const row = parseInt(target.getAttribute("row"));
-  const col = parseInt(target.getAttribute("col"));
-  let element = null;
+    handleHover(target, row, col, element);
+  };
 
-  handleHover(target, row, col, size, element);
-};
+  //gets the area of the last hovered element
+  gameSettings.handleMouseOut = (event) => {
+    const target = event.target;
+    const row = parseInt(target.getAttribute("row"));
+    const col = parseInt(target.getAttribute("col"));
+    let element = null;
 
-//gets the area of the last hovered element
-const handleMouseOut = (event, size) => {
-  const target = event.target;
-  const row = parseInt(target.getAttribute("row"));
-  const col = parseInt(target.getAttribute("col"));
-  let element = null;
+    handleHoverDeletion(row, col, element);
+  };
 
-  handleHoverDeletion(row, col, size, element);
+  box.addEventListener("mouseover", gameSettings.handleMouseOver);
+  box.addEventListener("mouseout", gameSettings.handleMouseOut);
 };
 
 //applies style to the gameboard on hover
-const handleHover = (target, row, col, size, element) => {
-  const handleClick = () => {
+const handleHover = (target, row, col, element, pos = []) => {
+  const handleClick = (pos) => {
     const box = document.getElementById("player-box");
-    placeBoat();
-    box.removeEventListener("mouseover", (event) => {
-      handleMouseOver(event, size);
-    });
+    placeBoat(gameSettings.size, pos);
 
-    box.removeEventListener("mouseout", (event) => {
-      handleMouseOut(event, size);
-    });
-
+    box.removeEventListener("mouseover", gameSettings.handleMouseOver);
+    box.removeEventListener("mouseout", gameSettings.handleMouseOut);
     target.removeEventListener("click", handleClick);
   };
 
   if (ROTATION === VERTICAL) {
-    if (size + row > 10) {
+    if (gameSettings.size + row > 10) {
       target.style.backgroundColor = "var(--wrong)";
       return;
     }
-    target.addEventListener("click", handleClick);
-    for (let i = 0; i < size; i++) {
+    for (let i = 0; i < gameSettings.size; i++) {
       element = findElementByRowCol(i + row, col);
+      pos.push([i + row, col]);
       element.style.backgroundColor = "var(--good-place-hover)";
     }
+    target.addEventListener("click", () => handleClick(pos));
     return;
   } else if (ROTATION === HORIZONTAL) {
-    if (size + col > 10) {
+    if (gameSettings.size + col > 10) {
       target.style.backgroundColor = "var(--wrong)";
       return;
     }
     target.addEventListener("click", handleClick);
-    for (let i = 0; i < size; i++) {
+    for (let i = 0; i < gameSettings.size; i++) {
       element = findElementByRowCol(row, col + i);
+      pos.push([row, col + i]);
       element.style.backgroundColor = "var(--good-place-hover)";
     }
+    target.addEventListener("click", () => handleClick(pos));
     return;
   }
 };
 
 //delete the style of the last visited elements
-const handleHoverDeletion = (row, col, size, element) => {
+const handleHoverDeletion = (row, col, element) => {
   if (ROTATION === VERTICAL) {
-    for (let i = 0; i < size; i++) {
+    for (let i = 0; i < gameSettings.size; i++) {
       element = findElementByRowCol(i + row, col);
       element.style.backgroundColor = "transparent";
     }
     return;
   } else if (ROTATION === HORIZONTAL) {
-    for (let i = 0; i < size; i++) {
+    for (let i = 0; i < gameSettings.size; i++) {
       element = findElementByRowCol(row, col + i);
       element.style.backgroundColor = "transparent";
     }
