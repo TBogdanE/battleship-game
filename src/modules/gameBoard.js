@@ -72,14 +72,17 @@ const checkValidPlace = () => {
 };
 
 //applies style to the gameboard on hover
-const handleHover = (target, row, col, element, pos = []) => {
+const handleHover = (target, row, col, element) => {
+  let pos = [];
+  const clickHandler = () => handleClick(pos);
+
   const handleClick = (pos) => {
     const box = document.getElementById("player-box");
     placeBoat(gameSettings.size, pos);
 
     box.removeEventListener("mouseover", gameSettings.handleMouseOver);
     box.removeEventListener("mouseout", gameSettings.handleMouseOut);
-    target.removeEventListener("click", handleClick);
+    target.removeEventListener("click", clickHandler);
   };
 
   if (ROTATION === VERTICAL) {
@@ -87,25 +90,28 @@ const handleHover = (target, row, col, element, pos = []) => {
       target.style.backgroundColor = "var(--wrong)";
       return;
     }
+
     for (let i = 0; i < gameSettings.size; i++) {
       element = findElementByRowCol(i + row, col);
       pos.push([i + row, col]);
       element.style.backgroundColor = "var(--good-place-hover)";
     }
-    target.addEventListener("click", () => handleClick(pos));
+
+    target.addEventListener("click", clickHandler);
     return;
   } else if (ROTATION === HORIZONTAL) {
     if (gameSettings.size + col > 10) {
       target.style.backgroundColor = "var(--wrong)";
       return;
     }
-    target.addEventListener("click", handleClick);
+
     for (let i = 0; i < gameSettings.size; i++) {
       element = findElementByRowCol(row, col + i);
       pos.push([row, col + i]);
       element.style.backgroundColor = "var(--good-place-hover)";
     }
-    target.addEventListener("click", () => handleClick(pos));
+
+    target.addEventListener("click", clickHandler);
     return;
   }
 };
