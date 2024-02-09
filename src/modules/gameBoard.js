@@ -12,9 +12,9 @@ class settings {
 const gameSettings = new settings();
 
 //makes user place boats in order
-const placePlayerBoats = async () => {
-  await placeCarrierBoat();
-  await placeBatleship();
+const placePlayerBoats = () => {
+  placeCarrierBoat();
+  //await placeBatleship();
   //await placeDestroyer();
   //await placeSubmarine();
   //await placePatrolBoat();
@@ -24,19 +24,39 @@ const placePlayerBoats = async () => {
 //place carriere boat
 const placeCarrierBoat = () => {
   gameSettings.size = 5;
-  checkValidPlace();
+  checkValidPlace(placeBatleship);
 };
 
 const placeBatleship = () => {
-  console.log("next");
+  gameSettings.size = 4;
+  checkValidPlace(placeDestroyer);
+};
+
+const placeDestroyer = () => {
+  gameSettings.size = 3;
+  checkValidPlace(placeSubmarine);
+};
+
+const placeSubmarine = () => {
+  gameSettings.size = 3;
+  checkValidPlace(placePatrolBoat);
+};
+
+const placePatrolBoat = () => {
+  gameSettings.size = 2;
+  checkValidPlace(placeBoats);
+};
+
+const placeBoats = () => {
+  gameSettings.size = 2;
+  checkValidPlace();
 };
 
 //place the boat on the gameboard
-const placeBoat = (size, pos) => {
+const placeBoat = (size, pos, nextBoat) => {
   const newBoat = new Boat(size, pos);
   player.boats.push(newBoat);
-  console.log(newBoat.position);
-  console.log(player.boats);
+  nextBoat();
   return newBoat;
 };
 
@@ -44,7 +64,7 @@ const placeBoat = (size, pos) => {
 const placeComputerRandomBoats = () => {};
 
 //checks if the place user want to add the boat is valid
-const checkValidPlace = () => {
+const checkValidPlace = (nextBoat) => {
   const box = document.getElementById("player-box");
 
   //gets the area where the mouse hovers
@@ -54,7 +74,7 @@ const checkValidPlace = () => {
     const col = parseInt(target.getAttribute("col"));
     let element = null;
 
-    handleHover(target, row, col, element);
+    handleHover(target, row, col, element, nextBoat);
   };
 
   //gets the area of the last hovered element
@@ -72,13 +92,13 @@ const checkValidPlace = () => {
 };
 
 //applies style to the gameboard on hover
-const handleHover = (target, row, col, element) => {
+const handleHover = (target, row, col, element, nextBoat) => {
   let pos = [];
   const clickHandler = () => handleClick(pos);
 
   const handleClick = (pos) => {
     const box = document.getElementById("player-box");
-    placeBoat(gameSettings.size, pos);
+    placeBoat(gameSettings.size, pos, nextBoat);
 
     box.removeEventListener("mouseover", gameSettings.handleMouseOver);
     box.removeEventListener("mouseout", gameSettings.handleMouseOut);
