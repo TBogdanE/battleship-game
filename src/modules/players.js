@@ -11,9 +11,9 @@ class Computer {
 }
 
 class Boat {
-  constructor(size) {
+  constructor(size, pos = null) {
     this.size = size;
-    this.position = null;
+    this.position = pos;
   }
   hit() {}
 
@@ -22,3 +22,5 @@ class Boat {
 
 const player = new Player();
 const computerPlayer = new Computer();
+
+export { player, computerPlayer, Boat };
