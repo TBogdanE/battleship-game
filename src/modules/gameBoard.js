@@ -1,5 +1,10 @@
 import { player, computerPlayer, Boat } from "./players";
-import { VERTICAL, HORIZONTAL, ROTATION } from "./homepageUi";
+import {
+  VERTICAL,
+  HORIZONTAL,
+  ROTATION,
+  drawBoatOnGameBoard,
+} from "./homepageUi";
 
 class settings {
   constructor() {
@@ -12,59 +17,78 @@ class settings {
 const gameSettings = new settings();
 
 //makes user place boats in order
-const placePlayerBoats = () => {
-  placeCarrierBoat();
-  //await placeBatleship();
-  //await placeDestroyer();
-  //await placeSubmarine();
-  //await placePatrolBoat();
-  //await placeBoats();
+const placePlayerBoats = async () => {
+  await placeCarrierBoat();
+  await placeBatleship();
+  await placeDestroyer();
+  await placeSubmarine();
+  await placePatrolBoat();
+  await placeBoats();
 };
 
 //place carriere boat
 const placeCarrierBoat = () => {
-  gameSettings.size = 5;
-  checkValidPlace(placeBatleship);
+  console.log("carrier");
+  return new Promise((resolve, reject) => {
+    gameSettings.size = 5;
+    checkValidPlace(resolve);
+  });
 };
 
 const placeBatleship = () => {
-  gameSettings.size = 4;
-  checkValidPlace(placeDestroyer);
+  console.log("battleship");
+  return new Promise((resolve, reject) => {
+    gameSettings.size = 4;
+    checkValidPlace(resolve);
+  });
 };
 
 const placeDestroyer = () => {
-  gameSettings.size = 3;
-  checkValidPlace(placeSubmarine);
+  console.log("destroyer");
+  return new Promise((resolve, reject) => {
+    gameSettings.size = 3;
+    checkValidPlace(resolve);
+  });
 };
 
 const placeSubmarine = () => {
-  gameSettings.size = 3;
-  checkValidPlace(placePatrolBoat);
+  console.log("submarine");
+  return new Promise((resolve, reject) => {
+    gameSettings.size = 3;
+    checkValidPlace(resolve);
+  });
 };
 
 const placePatrolBoat = () => {
-  gameSettings.size = 2;
-  checkValidPlace(placeBoats);
+  console.log("patrolboat");
+  return new Promise((resolve, reject) => {
+    gameSettings.size = 2;
+    checkValidPlace(resolve);
+  });
 };
 
 const placeBoats = () => {
-  gameSettings.size = 2;
-  checkValidPlace();
+  console.log("boat");
+  return new Promise((resolve, reject) => {
+    gameSettings.size = 2;
+    checkValidPlace(resolve);
+  });
+  // placeComputerRandomBoats();
 };
 
 //place the boat on the gameboard
-const placeBoat = (size, pos, nextBoat) => {
+const addBoatToGameBoard = (size, pos, resolve) => {
   const newBoat = new Boat(size, pos);
+  console.log(newBoat);
   player.boats.push(newBoat);
-  nextBoat();
-  return newBoat;
+  drawBoatOnGameBoard();
 };
 
 //randomly places computer boats
 const placeComputerRandomBoats = () => {};
 
 //checks if the place user want to add the boat is valid
-const checkValidPlace = (nextBoat) => {
+const checkValidPlace = (resolve) => {
   const box = document.getElementById("player-box");
 
   //gets the area where the mouse hovers
@@ -74,7 +98,7 @@ const checkValidPlace = (nextBoat) => {
     const col = parseInt(target.getAttribute("col"));
     let element = null;
 
-    handleHover(target, row, col, element, nextBoat);
+    handleHover(target, row, col, element, resolve);
   };
 
   //gets the area of the last hovered element
@@ -92,17 +116,17 @@ const checkValidPlace = (nextBoat) => {
 };
 
 //applies style to the gameboard on hover
-const handleHover = (target, row, col, element, nextBoat) => {
+const handleHover = (target, row, col, element, resolve) => {
   let pos = [];
   const clickHandler = () => handleClick(pos);
 
   const handleClick = (pos) => {
     const box = document.getElementById("player-box");
-    placeBoat(gameSettings.size, pos, nextBoat);
-
+    addBoatToGameBoard(gameSettings.size, pos);
+    target.removeEventListener("click", clickHandler);
     box.removeEventListener("mouseover", gameSettings.handleMouseOver);
     box.removeEventListener("mouseout", gameSettings.handleMouseOut);
-    target.removeEventListener("click", clickHandler);
+    resolve();
   };
 
   if (ROTATION === VERTICAL) {
@@ -128,7 +152,7 @@ const handleHover = (target, row, col, element, nextBoat) => {
     for (let i = 0; i < gameSettings.size; i++) {
       element = findElementByRowCol(row, col + i);
       pos.push([row, col + i]);
-      element.style.backgroundColor = "var(--good-place-hover)";
+      element.style.backgroundColor = "transparent";
     }
 
     target.addEventListener("click", clickHandler);
@@ -159,4 +183,4 @@ const findElementByRowCol = (row, col) => {
   return document.querySelector(selector);
 };
 
-export { placePlayerBoats, placeComputerRandomBoats };
+export { placePlayerBoats, placeComputerRandomBoats, findElementByRowCol };
