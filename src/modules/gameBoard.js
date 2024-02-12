@@ -129,19 +129,23 @@ const handleHover = (target, row, col, element, resolve) => {
     resolve();
   };
 
+  const handleHoverStyle = (startRow, startCol, rowStep, colStep) => {
+    for (let i = 0; i < gameSettings.size; i++) {
+      const newRow = startRow + i * rowStep;
+      const newCol = startCol + i * colStep;
+      const element = findElementByRowCol(newRow, newCol);
+      pos.push([i + startRow, startCol]);
+      element.style.backgroundColor = "var(--good-place-hover)";
+      target.addEventListener("click", clickHandler);
+    }
+  };
+
   if (getRotation() === VERTICAL) {
     if (gameSettings.size + row > 10) {
       target.style.backgroundColor = "var(--wrong)";
       return;
     }
-
-    for (let i = 0; i < gameSettings.size; i++) {
-      element = findElementByRowCol(i + row, col);
-      pos.push([i + row, col]);
-      element.style.backgroundColor = "var(--good-place-hover)";
-    }
-
-    target.addEventListener("click", clickHandler);
+    handleHoverStyle(row, col, 1, 0);
     return;
   } else if (getRotation() === HORIZONTAL) {
     if (gameSettings.size + col > 10) {
@@ -149,13 +153,7 @@ const handleHover = (target, row, col, element, resolve) => {
       return;
     }
 
-    for (let i = 0; i < gameSettings.size; i++) {
-      element = findElementByRowCol(row, col + i);
-      pos.push([row, col + i]);
-      element.style.backgroundColor = "var(--good-place-hover)";
-    }
-
-    target.addEventListener("click", clickHandler);
+    handleHoverStyle(row, col, 0, 1);
     return;
   }
 };
