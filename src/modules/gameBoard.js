@@ -1,8 +1,8 @@
 import { player, computerPlayer, Boat } from "./players";
 import {
+  ROTATION,
   VERTICAL,
   HORIZONTAL,
-  ROTATION,
   drawBoatOnGameBoard,
 } from "./homepageUi";
 
@@ -29,7 +29,7 @@ const placePlayerBoats = async () => {
 //place carriere boat
 const placeCarrierBoat = () => {
   console.log("carrier");
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     gameSettings.size = 5;
     checkValidPlace(resolve);
   });
@@ -37,7 +37,7 @@ const placeCarrierBoat = () => {
 
 const placeBatleship = () => {
   console.log("battleship");
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     gameSettings.size = 4;
     checkValidPlace(resolve);
   });
@@ -45,7 +45,7 @@ const placeBatleship = () => {
 
 const placeDestroyer = () => {
   console.log("destroyer");
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     gameSettings.size = 3;
     checkValidPlace(resolve);
   });
@@ -53,7 +53,7 @@ const placeDestroyer = () => {
 
 const placeSubmarine = () => {
   console.log("submarine");
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     gameSettings.size = 3;
     checkValidPlace(resolve);
   });
@@ -61,7 +61,7 @@ const placeSubmarine = () => {
 
 const placePatrolBoat = () => {
   console.log("patrolboat");
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     gameSettings.size = 2;
     checkValidPlace(resolve);
   });
@@ -69,7 +69,7 @@ const placePatrolBoat = () => {
 
 const placeBoats = () => {
   console.log("boat");
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     gameSettings.size = 2;
     checkValidPlace(resolve);
   });
@@ -129,7 +129,7 @@ const handleHover = (target, row, col, element, resolve) => {
     resolve();
   };
 
-  if (ROTATION === VERTICAL) {
+  if (getRotation() === VERTICAL) {
     if (gameSettings.size + row > 10) {
       target.style.backgroundColor = "var(--wrong)";
       return;
@@ -143,7 +143,7 @@ const handleHover = (target, row, col, element, resolve) => {
 
     target.addEventListener("click", clickHandler);
     return;
-  } else if (ROTATION === HORIZONTAL) {
+  } else if (getRotation() === HORIZONTAL) {
     if (gameSettings.size + col > 10) {
       target.style.backgroundColor = "var(--wrong)";
       return;
@@ -152,7 +152,7 @@ const handleHover = (target, row, col, element, resolve) => {
     for (let i = 0; i < gameSettings.size; i++) {
       element = findElementByRowCol(row, col + i);
       pos.push([row, col + i]);
-      element.style.backgroundColor = "transparent";
+      element.style.backgroundColor = "var(--good-place-hover)";
     }
 
     target.addEventListener("click", clickHandler);
@@ -162,13 +162,13 @@ const handleHover = (target, row, col, element, resolve) => {
 
 //delete the style of the last visited elements
 const handleHoverDeletion = (row, col, element) => {
-  if (ROTATION === VERTICAL) {
+  if (getRotation() === VERTICAL) {
     for (let i = 0; i < gameSettings.size; i++) {
       element = findElementByRowCol(i + row, col);
       element.style.backgroundColor = "transparent";
     }
     return;
-  } else if (ROTATION === HORIZONTAL) {
+  } else if (getRotation() === HORIZONTAL) {
     for (let i = 0; i < gameSettings.size; i++) {
       element = findElementByRowCol(row, col + i);
       element.style.backgroundColor = "transparent";
@@ -181,6 +181,10 @@ const handleHoverDeletion = (row, col, element) => {
 const findElementByRowCol = (row, col) => {
   const selector = `[row="${row}"][col="${col}"]`;
   return document.querySelector(selector);
+};
+
+const getRotation = () => {
+  return ROTATION;
 };
 
 export { placePlayerBoats, placeComputerRandomBoats, findElementByRowCol };
