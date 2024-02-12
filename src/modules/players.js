@@ -2,6 +2,17 @@ class Player {
   constructor() {
     this.boats = [];
   }
+
+  boatPositions() {
+    let arr = [];
+    for (let boats of this.boats) {
+      for (let position of boats.position) {
+        arr.push(position);
+      }
+    }
+    console.log(arr);
+    return arr;
+  }
 }
 
 class Computer {
