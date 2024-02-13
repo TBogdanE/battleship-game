@@ -114,7 +114,6 @@ const handleHover = (target, row, col, element, resolve) => {
   let pos = [];
   let postion = getPosition(row, col, 1, 0);
   let boatPosition = player.boatPositions();
-  let containsAny = checkContainsAny(postion, boatPosition);
 
   const handleClick = () => {
     const box = document.getElementById("player-box");
@@ -149,14 +148,20 @@ const handleHover = (target, row, col, element, resolve) => {
   }
 
   if (getRotation() === VERTICAL) {
-    if (gameSettings.size + row > 10 || containsAny) {
+    if (
+      gameSettings.size + row > 10 ||
+      checkContainsAny(postion, boatPosition)
+    ) {
       target.style.backgroundColor = "var(--wrong)";
       return;
     }
     handleHoverStyle(row, col, 1, 0);
     return;
   } else if (getRotation() === HORIZONTAL) {
-    if (gameSettings.size + col > 10 || containsAny) {
+    if (
+      gameSettings.size + col > 10 ||
+      checkContainsAny(postion, boatPosition)
+    ) {
       target.style.backgroundColor = "var(--wrong)";
       return;
     }
