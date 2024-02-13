@@ -28,7 +28,6 @@ const placePlayerBoats = async () => {
 
 //place carriere boat
 const placeCarrierBoat = () => {
-  console.log("carrier");
   return new Promise((resolve) => {
     gameSettings.size = 5;
     checkValidPlace(resolve);
@@ -36,7 +35,6 @@ const placeCarrierBoat = () => {
 };
 
 const placeBatleship = () => {
-  console.log("battleship");
   return new Promise((resolve) => {
     gameSettings.size = 4;
     checkValidPlace(resolve);
@@ -44,7 +42,6 @@ const placeBatleship = () => {
 };
 
 const placeDestroyer = () => {
-  console.log("destroyer");
   return new Promise((resolve) => {
     gameSettings.size = 3;
     checkValidPlace(resolve);
@@ -52,7 +49,6 @@ const placeDestroyer = () => {
 };
 
 const placeSubmarine = () => {
-  console.log("submarine");
   return new Promise((resolve) => {
     gameSettings.size = 3;
     checkValidPlace(resolve);
@@ -60,7 +56,6 @@ const placeSubmarine = () => {
 };
 
 const placePatrolBoat = () => {
-  console.log("patrolboat");
   return new Promise((resolve) => {
     gameSettings.size = 2;
     checkValidPlace(resolve);
@@ -68,7 +63,6 @@ const placePatrolBoat = () => {
 };
 
 const placeBoats = () => {
-  console.log("boat");
   return new Promise((resolve) => {
     gameSettings.size = 2;
     checkValidPlace(resolve);
@@ -77,10 +71,10 @@ const placeBoats = () => {
 };
 
 //place the boat on the gameboard
-const addBoatToGameBoard = (size, pos, resolve) => {
+const addBoatToGameBoard = (size, pos) => {
   const newBoat = new Boat(size, pos);
-  console.log(newBoat);
   player.boats.push(newBoat);
+  console.log("PlayerBoats:", player.boatPositions(), "Position", pos);
   drawBoatOnGameBoard();
 };
 
@@ -118,41 +112,54 @@ const checkValidPlace = (resolve) => {
 //applies style to the gameboard on hover
 const handleHover = (target, row, col, element, resolve) => {
   let pos = [];
-  const clickHandler = () => handleClick(pos);
+  let postion = getPosition(row, col, 1, 0);
+  let boatPosition = player.boatPositions();
+  let containsAny = checkContainsAny(postion, boatPosition);
 
-  const handleClick = (pos) => {
+  const handleClick = () => {
     const box = document.getElementById("player-box");
     addBoatToGameBoard(gameSettings.size, pos);
-    target.removeEventListener("click", clickHandler);
+    target.removeEventListener("click", handleClick);
     box.removeEventListener("mouseover", gameSettings.handleMouseOver);
     box.removeEventListener("mouseout", gameSettings.handleMouseOut);
     resolve();
   };
 
   const handleHoverStyle = (startRow, startCol, rowStep, colStep) => {
+    target.addEventListener("click", handleClick);
+
     for (let i = 0; i < gameSettings.size; i++) {
       const newRow = startRow + i * rowStep;
       const newCol = startCol + i * colStep;
-      const element = findElementByRowCol(newRow, newCol);
-      pos.push([i + startRow, startCol]);
+      pos.push([newRow, newCol]);
+      element = findElementByRowCol(newRow, newCol);
       element.style.backgroundColor = "var(--good-place-hover)";
-      target.addEventListener("click", clickHandler);
     }
   };
 
+  function getPosition(startRow, startCol, rowStep, colStep) {
+    let pos = [];
+    for (let i = 0; i < gameSettings.size; i++) {
+      const newRow = startRow + i * rowStep;
+      const newCol = startCol + i * colStep;
+      pos.push([newRow, newCol]);
+    }
+    console.log("getposition", pos);
+    return pos;
+  }
+
   if (getRotation() === VERTICAL) {
-    if (gameSettings.size + row > 10) {
+    if (gameSettings.size + row > 10 || containsAny) {
       target.style.backgroundColor = "var(--wrong)";
       return;
     }
     handleHoverStyle(row, col, 1, 0);
     return;
   } else if (getRotation() === HORIZONTAL) {
-    if (gameSettings.size + col > 10) {
+    if (gameSettings.size + col > 10 || containsAny) {
       target.style.backgroundColor = "var(--wrong)";
       return;
     }
-
     handleHoverStyle(row, col, 0, 1);
     return;
   }
@@ -174,6 +181,20 @@ const handleHoverDeletion = (row, col, element) => {
     return;
   }
 };
+
+function checkContainsAny(arr1, arr2) {
+  if (arr1.length === 0 && arr2.length === 0) return false;
+  for (const element1 of arr2) {
+    for (const element2 of arr1) {
+      if (element1[0] === element2[0] && element1[1] == element2[1]) {
+        console.log("true");
+        return true;
+      }
+    }
+  }
+  console.log("false");
+  return false;
+}
 
 //searches the gameboard elements based on row and col
 const findElementByRowCol = (row, col) => {
