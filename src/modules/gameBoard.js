@@ -18,56 +18,22 @@ const gameSettings = new settings();
 
 //makes user place boats in order
 const placePlayerBoats = async () => {
-  await placeCarrierBoat();
-  await placeBatleship();
-  await placeDestroyer();
-  await placeSubmarine();
-  await placePatrolBoat();
-  await placeBoats();
+  await placeNewBoat("Carrier", 5);
+  await placeNewBoat("Batleship", 4);
+  await placeNewBoat("Destroyer", 3);
+  await placeNewBoat("Submarine", 3);
+  await placeNewBoat("Patrol boat", 2);
+  await placeNewBoat("Boat", 3);
 };
 
 //place carriere boat
-const placeCarrierBoat = () => {
-  return new Promise((resolve) => {
-    gameSettings.size = 5;
-    checkValidPlace(resolve);
-  });
-};
 
-const placeBatleship = () => {
+const placeNewBoat = (name, size) => {
   return new Promise((resolve) => {
-    gameSettings.size = 4;
+    console.log(name);
+    gameSettings.size = size;
     checkValidPlace(resolve);
   });
-};
-
-const placeDestroyer = () => {
-  return new Promise((resolve) => {
-    gameSettings.size = 3;
-    checkValidPlace(resolve);
-  });
-};
-
-const placeSubmarine = () => {
-  return new Promise((resolve) => {
-    gameSettings.size = 3;
-    checkValidPlace(resolve);
-  });
-};
-
-const placePatrolBoat = () => {
-  return new Promise((resolve) => {
-    gameSettings.size = 2;
-    checkValidPlace(resolve);
-  });
-};
-
-const placeBoats = () => {
-  return new Promise((resolve) => {
-    gameSettings.size = 2;
-    checkValidPlace(resolve);
-  });
-  // placeComputerRandomBoats();
 };
 
 //place the boat on the gameboard
@@ -114,6 +80,8 @@ const handleHover = (target, row, col, element, resolve) => {
   let pos = [];
   let postion = getPosition(row, col, 1, 0);
   let boatPosition = player.boatPositions();
+
+  drawBoatOnGameBoard();
 
   const handleClick = () => {
     const box = document.getElementById("player-box");
@@ -192,12 +160,10 @@ function checkContainsAny(arr1, arr2) {
   for (const element1 of arr2) {
     for (const element2 of arr1) {
       if (element1[0] === element2[0] && element1[1] == element2[1]) {
-        console.log("true");
         return true;
       }
     }
   }
-  console.log("false");
   return false;
 }
 
