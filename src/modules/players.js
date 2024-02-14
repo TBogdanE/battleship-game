@@ -10,7 +10,6 @@ class Player {
         arr.push(position);
       }
     }
-    console.log(arr);
     return arr;
   }
 }
@@ -18,6 +17,16 @@ class Player {
 class Computer {
   constructor() {
     this.boats = [];
+  }
+
+  boatPositions() {
+    let arr = [];
+    for (let boats of this.boats) {
+      for (let position of boats.position) {
+        arr.push(position);
+      }
+    }
+    return arr;
   }
 }
 
@@ -31,7 +40,16 @@ class Boat {
   isSunk() {}
 }
 
+class settings {
+  constructor() {
+    this.size = 0;
+    this.handleMouseOver = null;
+    this.handleMouseOut = null;
+  }
+}
+
+const gameSettings = new settings();
 const player = new Player();
 const computerPlayer = new Computer();
 
-export { player, computerPlayer, Boat };
+export { gameSettings, player, computerPlayer, Boat };
