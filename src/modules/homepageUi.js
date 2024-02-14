@@ -1,4 +1,6 @@
-import { placeBoats } from "./gameBoard";
+import { placePlayerBoats, findElementByRowCol } from "./handlePlayer";
+import { placeComputerBoats } from "./handleComputer";
+import { player } from "./players";
 
 const VERTICAL = "Vertical";
 const HORIZONTAL = "Horizontal";
@@ -36,7 +38,8 @@ const btnStartGame = () => {
   const page = document.querySelector("body");
   const button = document.getElementById("btn-start-game");
   const handleBtn = () => {
-    placeBoats();
+    placeComputerBoats();
+    placePlayerBoats();
     if (page.contains(button)) {
       page.removeChild(button);
       button.removeEventListener("click", handleBtn);
@@ -61,4 +64,23 @@ const rotateBoatBtn = () => {
   page.appendChild(btn);
 };
 
-export { renderComputerBox, renderPlayerBox, btnStartGame };
+const drawBoatOnGameBoard = () => {
+  const boatsArea = player.boats;
+  for (const boat of boatsArea) {
+    for (const [row, col] of boat.position) {
+      const element = findElementByRowCol(row, col);
+      element.style.backgroundColor = "var(--element)";
+    }
+  }
+  return;
+};
+
+export {
+  renderComputerBox,
+  renderPlayerBox,
+  btnStartGame,
+  VERTICAL,
+  HORIZONTAL,
+  ROTATION,
+  drawBoatOnGameBoard,
+};
