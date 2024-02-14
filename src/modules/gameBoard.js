@@ -23,32 +23,22 @@ const placePlayerBoats = async () => {
   await placeNewBoat("Destroyer", 3);
   await placeNewBoat("Submarine", 3);
   await placeNewBoat("Patrol boat", 2);
-  await placeNewBoat("Boat", 3);
+  await placeNewBoat("Boat", 2);
 };
 
 //place carriere boat
-
 const placeNewBoat = (name, size) => {
   return new Promise((resolve) => {
     console.log(name);
-    gameSettings.size = size;
-    checkValidPlace(resolve);
+    checkValidPlace(resolve, size);
   });
-};
-
-//place the boat on the gameboard
-const addBoatToGameBoard = (size, pos) => {
-  const newBoat = new Boat(size, pos);
-  player.boats.push(newBoat);
-  console.log("PlayerBoats:", player.boatPositions(), "Position", pos);
-  drawBoatOnGameBoard();
 };
 
 //randomly places computer boats
 const placeComputerRandomBoats = () => {};
 
 //checks if the place user want to add the boat is valid
-const checkValidPlace = (resolve) => {
+const checkValidPlace = (resolve, size) => {
   const box = document.getElementById("player-box");
 
   //gets the area where the mouse hovers
@@ -58,7 +48,7 @@ const checkValidPlace = (resolve) => {
     const col = parseInt(target.getAttribute("col"));
     let element = null;
 
-    handleHover(target, row, col, element, resolve);
+    handleHover(target, row, col, size, element, resolve);
   };
 
   //gets the area of the last hovered element
@@ -68,7 +58,7 @@ const checkValidPlace = (resolve) => {
     const col = parseInt(target.getAttribute("col"));
     let element = null;
 
-    handleHoverDeletion(row, col, element);
+    handleHoverDeletion(row, col, size, element);
   };
 
   box.addEventListener("mouseover", gameSettings.handleMouseOver);
@@ -76,26 +66,34 @@ const checkValidPlace = (resolve) => {
 };
 
 //applies style to the gameboard on hover
-const handleHover = (target, row, col, element, resolve) => {
+const handleHover = (target, row, col, size, element, resolve) => {
   let pos = [];
-  let postion = getPosition(row, col, 1, 0);
+  let postion = getPosition(row, col, size);
   let boatPosition = player.boatPositions();
 
   drawBoatOnGameBoard();
 
   const handleClick = () => {
     const box = document.getElementById("player-box");
-    addBoatToGameBoard(gameSettings.size, pos);
     target.removeEventListener("click", handleClick);
     box.removeEventListener("mouseover", gameSettings.handleMouseOver);
     box.removeEventListener("mouseout", gameSettings.handleMouseOut);
+    addBoatToGameBoard(size, pos);
     resolve();
   };
 
-  const handleHoverStyle = (startRow, startCol, rowStep, colStep) => {
+  //place the boat on the gameboard
+  const addBoatToGameBoard = (size, pos) => {
+    const newBoat = new Boat(size, pos);
+    player.boats.push(newBoat);
+    drawBoatOnGameBoard();
+    console.log("PlayerBoats:", player.boatPositions(), "Position", pos);
+  };
+
+  const handleHoverStyle = (size, startRow, startCol, rowStep, colStep) => {
     target.addEventListener("click", handleClick);
 
-    for (let i = 0; i < gameSettings.size; i++) {
+    for (let i = 0; i < size; i++) {
       const newRow = startRow + i * rowStep;
       const newCol = startCol + i * colStep;
       pos.push([newRow, newCol]);
@@ -104,50 +102,54 @@ const handleHover = (target, row, col, element, resolve) => {
     }
   };
 
-  function getPosition(startRow, startCol, rowStep, colStep) {
+  function getPosition(startRow, startCol, size) {
     let pos = [];
-    for (let i = 0; i < gameSettings.size; i++) {
+    let rowStep;
+    let colStep;
+
+    if (getRotation() === VERTICAL) {
+      rowStep = 1;
+      colStep = 0;
+    } else if (getRotation() === HORIZONTAL) {
+      rowStep = 0;
+      colStep = 1;
+    }
+
+    for (let i = 0; i < size; i++) {
       const newRow = startRow + i * rowStep;
       const newCol = startCol + i * colStep;
       pos.push([newRow, newCol]);
     }
+
     console.log("getposition", pos);
     return pos;
   }
 
   if (getRotation() === VERTICAL) {
-    if (
-      gameSettings.size + row > 10 ||
-      checkContainsAny(postion, boatPosition)
-    ) {
+    if (size + row > 10 || checkContainsAny(postion, boatPosition)) {
       target.style.backgroundColor = "var(--wrong)";
       return;
     }
-    handleHoverStyle(row, col, 1, 0);
-    return;
+    handleHoverStyle(size, row, col, 1, 0);
   } else if (getRotation() === HORIZONTAL) {
-    if (
-      gameSettings.size + col > 10 ||
-      checkContainsAny(postion, boatPosition)
-    ) {
+    if (size + col > 10 || checkContainsAny(postion, boatPosition)) {
       target.style.backgroundColor = "var(--wrong)";
       return;
     }
-    handleHoverStyle(row, col, 0, 1);
-    return;
+    handleHoverStyle(size, row, col, 0, 1);
   }
 };
 
 //delete the style of the last visited elements
-const handleHoverDeletion = (row, col, element) => {
+const handleHoverDeletion = (row, col, size, element) => {
   if (getRotation() === VERTICAL) {
-    for (let i = 0; i < gameSettings.size; i++) {
+    for (let i = 0; i < size; i++) {
       element = findElementByRowCol(i + row, col);
       element.style.backgroundColor = "transparent";
     }
     return;
   } else if (getRotation() === HORIZONTAL) {
-    for (let i = 0; i < gameSettings.size; i++) {
+    for (let i = 0; i < size; i++) {
       element = findElementByRowCol(row, col + i);
       element.style.backgroundColor = "transparent";
     }
