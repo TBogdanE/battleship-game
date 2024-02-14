@@ -1,10 +1,12 @@
 import { placePlayerBoats, findElementByRowCol } from "./handlePlayer";
 import { placeComputerBoats } from "./handleComputer";
 import { player } from "./players";
-
-const VERTICAL = "Vertical";
-const HORIZONTAL = "Horizontal";
-let ROTATION = VERTICAL;
+import {
+  ROTATION,
+  VERTICAL,
+  HORIZONTAL,
+  getRotation,
+} from "./utils/getRotation";
 
 const renderPlayerBox = () => {
   const box = document.getElementById("player-box");
@@ -57,7 +59,8 @@ const rotateBoatBtn = () => {
   btn.textContent = ROTATION;
 
   btn.addEventListener("click", () => {
-    ROTATION = ROTATION === HORIZONTAL ? VERTICAL : HORIZONTAL;
+    let rotation = ROTATION === HORIZONTAL ? VERTICAL : HORIZONTAL;
+    getRotation(rotation);
     btn.textContent = ROTATION;
   });
 
@@ -79,8 +82,5 @@ export {
   renderComputerBox,
   renderPlayerBox,
   btnStartGame,
-  VERTICAL,
-  HORIZONTAL,
-  ROTATION,
   drawBoatOnGameBoard,
 };
