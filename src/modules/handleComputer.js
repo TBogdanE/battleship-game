@@ -7,12 +7,15 @@ import { checkNearby } from "./utils/checkNearby";
 const box = document.getElementById("computer-box");
 
 async function placeComputerBoats() {
-  await placeNewBoat("Carrier", 5);
-  await placeNewBoat("Batleship", 4);
-  await placeNewBoat("Destroyer", 3);
-  await placeNewBoat("Submarine", 3);
-  await placeNewBoat("Patrol boat", 2);
-  await placeNewBoat("Boat", 2);
+  return new Promise(async (resolve) => {
+    await placeNewBoat("Carrier", 5);
+    await placeNewBoat("Batleship", 4);
+    await placeNewBoat("Destroyer", 3);
+    await placeNewBoat("Submarine", 3);
+    await placeNewBoat("Patrol boat", 2);
+    await placeNewBoat("Boat", 2);
+    resolve();
+  });
 }
 
 //place carriere boat
