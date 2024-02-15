@@ -1,3 +1,3 @@
-import { startApp } from "./homepage.js";
+import { startApp } from "./modules/homepage";
 
 startApp();
