@@ -18,11 +18,12 @@ async function placeComputerBoats() {
 //place carriere boat
 function placeNewBoat(name, size) {
   return new Promise((resolve) => {
-    checkValidPlace(resolve, size);
+    checkValidPlace(resolve, name, size);
   });
 }
 
-function checkValidPlace(resolve, size) {
+function checkValidPlace(resolve, name, size) {
+  let step = 0;
   let position = randomPosition(size);
   let computerBoats = computerPlayer.boatPositions();
   console.log("position", position, "comp", computerBoats);
@@ -31,12 +32,15 @@ function checkValidPlace(resolve, size) {
     checkContainsAny(position, computerBoats) ||
     checkNearby(position, computerBoats)
   ) {
+    if (step > 100) return;
     position = randomPosition(size);
+    step += 1;
   }
 
-  const newBoat = new Boat(size, position);
+  const newBoat = new Boat(name, size, position);
   computerPlayer.boats.push(newBoat);
 
+  //temporary !!!!!!!!!!!!!
   for (let element of position) {
     const e = findElementByRowCol(box, element[0], element[1]);
     e.style.backgroundColor = "var(--good-place-hover)";

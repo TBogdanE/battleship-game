@@ -20,13 +20,12 @@ async function placePlayerBoats() {
 //place carriere boat
 function placeNewBoat(name, size) {
   return new Promise((resolve) => {
-    console.log(name);
-    checkValidPlace(resolve, size);
+    checkValidPlace(resolve, name, size);
   });
 }
 
 //checks if the place user want to add the boat is valid
-function checkValidPlace(resolve, size) {
+function checkValidPlace(resolve, name, size) {
   // const box = document.getElementById("player-box");
 
   //gets the area where the mouse hovers
@@ -36,7 +35,7 @@ function checkValidPlace(resolve, size) {
     const col = parseInt(target.getAttribute("col"));
     let element = null;
 
-    handleHover(target, row, col, size, element, resolve);
+    handleHover(target, row, col, name, size, element, resolve);
   };
 
   //gets the area of the last hovered element
@@ -54,7 +53,7 @@ function checkValidPlace(resolve, size) {
 }
 
 //applies style to the gameboard on hover
-function handleHover(target, row, col, size, element, resolve) {
+function handleHover(target, row, col, name, size, element, resolve) {
   let pos = [];
   let position = getPosition(row, col, size);
   let boatPosition = player.boatPositions();
@@ -65,16 +64,16 @@ function handleHover(target, row, col, size, element, resolve) {
     target.removeEventListener("click", handleClick);
     box.removeEventListener("mouseover", gameSettings.handleMouseOver);
     box.removeEventListener("mouseout", gameSettings.handleMouseOut);
-    addBoatToGameBoard(size, pos);
+    addBoatToGameBoard(name, size, pos);
     resolve();
   }
 
   //place the boat on the gameboard
-  function addBoatToGameBoard(size, pos) {
-    const newBoat = new Boat(size, pos);
+  function addBoatToGameBoard(name, size, pos) {
+    const newBoat = new Boat(name, size, pos);
     player.boats.push(newBoat);
     drawBoatOnGameBoard();
-    console.log("PlayerBoats:", player.boatPositions(), "Position", pos);
+    //console.log("PlayerBoats:", player.boatPositions(), "Position", pos);
   }
 
   function handleHoverStyle(size, startRow, startCol, rowStep, colStep) {
@@ -107,8 +106,6 @@ function handleHover(target, row, col, size, element, resolve) {
       const newCol = startCol + i * colStep;
       pos.push([newRow, newCol]);
     }
-
-    console.log("getposition", pos);
     return pos;
   }
 

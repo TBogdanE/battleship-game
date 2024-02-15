@@ -31,13 +31,21 @@ class Computer {
 }
 
 class Boat {
-  constructor(size, pos = null) {
+  constructor(name, size, pos = null) {
+    this.name = name;
     this.size = size;
     this.position = pos;
+    this.hits = 0;
+    this.sunk = false;
   }
-  hit() {}
 
-  isSunk() {}
+  hit() {
+    this.hits += 1;
+  }
+
+  isSunk() {
+    return hits === this.size;
+  }
 }
 
 class settings {
