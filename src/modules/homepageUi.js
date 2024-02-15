@@ -1,5 +1,4 @@
-import { placePlayerBoats, findElementByRowCol } from "./handlePlayer";
-import { placeComputerBoats } from "./handleComputer";
+import { findElementByRowCol } from "./utils/findElement";
 import { player } from "./players";
 import {
   ROTATION,
@@ -7,6 +6,7 @@ import {
   HORIZONTAL,
   getRotation,
 } from "./utils/getRotation";
+import { startGame } from "./handleGame";
 
 const renderPlayerBox = () => {
   const box = document.getElementById("player-box");
@@ -40,8 +40,7 @@ const btnStartGame = () => {
   const page = document.querySelector("body");
   const button = document.getElementById("btn-start-game");
   const handleBtn = () => {
-    placeComputerBoats();
-    placePlayerBoats();
+    startGame();
     if (page.contains(button)) {
       page.removeChild(button);
       button.removeEventListener("click", handleBtn);
@@ -68,10 +67,11 @@ const rotateBoatBtn = () => {
 };
 
 const drawBoatOnGameBoard = () => {
+  const box = document.getElementById("player-box");
   const boatsArea = player.boats;
   for (const boat of boatsArea) {
     for (const [row, col] of boat.position) {
-      const element = findElementByRowCol(row, col);
+      const element = findElementByRowCol(box, row, col);
       element.style.backgroundColor = "var(--element)";
     }
   }
