@@ -1,5 +1,6 @@
 //searches the gameboard elements based on row and col
-export function findElementByRowCol(row, col) {
+export function findElementByRowCol(parent, row, col) {
   const selector = `[row="${row}"][col="${col}"]`;
-  return document.querySelector(selector);
+  console.log("parent", parent);
+  return parent.querySelector(selector);
 }
