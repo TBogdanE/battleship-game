@@ -18,22 +18,28 @@ body {
   grid-template-rows: repeat(10, 1fr);
   margin: 0;
   background-color: var(--body);
+  min-height: 100vh;
 }
 
 #page-title {
   grid-area: 1 / 6 / 2 / 11;
-  color: var(--text);
-  font-size: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  padding: 1em;
+}
+
+#page-title:first-child {
+  color: var(--text);
+  font-size: 2.5em;
 }
 
 .gameboard {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
-  background-color: var(--body);
-  margin: 0.3em solid var(--element);
+  border: 0.3em solid var(--element);
+  border-radius: 10px;
 }
 #player-box {
   grid-area: 3 / 2 / 9 / 8;
@@ -45,7 +51,7 @@ body {
 
 .box-div {
   background-color: var(--body);
-  border: 0.1em solid var(--element);
+  border: 0.2em solid var(--element);
   width: 1fr;
   height: 1fr;
   transition: 0.15s ease-in-out;
