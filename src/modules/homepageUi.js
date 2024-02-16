@@ -8,8 +8,10 @@ import {
 } from "./utils/getRotation";
 import { startGame } from "./handleGame";
 
+const playerBox = document.getElementById("player-box");
+const computerBox = document.getElementById("computer-box");
+
 const renderPlayerBox = () => {
-  const box = document.getElementById("player-box");
   for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
       let element = document.createElement("div");
@@ -17,13 +19,12 @@ const renderPlayerBox = () => {
       element.classList.add("box-div");
       element.setAttribute("row", i);
       element.setAttribute("col", j);
-      box.appendChild(element);
+      playerBox.appendChild(element);
     }
   }
 };
 
 const renderComputerBox = () => {
-  const box = document.getElementById("computer-box");
   for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
       let element = document.createElement("div");
@@ -31,7 +32,7 @@ const renderComputerBox = () => {
       element.classList.add("box-div");
       element.setAttribute("row", i);
       element.setAttribute("col", j);
-      box.appendChild(element);
+      computerBox.appendChild(element);
     }
   }
 };
@@ -67,20 +68,25 @@ const rotateBoatBtn = () => {
 };
 
 const drawBoatOnGameBoard = () => {
-  const box = document.getElementById("player-box");
   const boatsArea = player.boats;
   for (const boat of boatsArea) {
     for (const [row, col] of boat.position) {
-      const element = findElementByRowCol(box, row, col);
+      const element = findElementByRowCol(playerBox, row, col);
       element.style.backgroundColor = "var(--element)";
     }
   }
   return;
 };
 
+function showHittedBoad(row, col) {
+  const element = findElementByRowCol(computerBox, row, col);
+  element.style.backgroundColor = "var(--wrong)";
+}
+
 export {
   renderComputerBox,
   renderPlayerBox,
   btnStartGame,
   drawBoatOnGameBoard,
+  showHittedBoad,
 };
