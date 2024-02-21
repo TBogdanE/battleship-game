@@ -2,7 +2,12 @@ import { placePlayerBoats } from "./handlePlayer";
 import { placeComputerBoats } from "./handleComputer";
 import { checkContainsAny } from "./utils/checkContainsAny";
 import { computerPlayer, gameSettings, player } from "./players";
-import { drawBoatOnGameBoard, showBullet, showHittedPos } from "./homepageUi";
+import {
+  drawBoatOnGameBoard,
+  removeRotateBtn,
+  showBullet,
+  showHittedPos,
+} from "./homepageUi";
 import { findElementByRowCol } from "./utils/findElement";
 
 const computerBox = document.getElementById("computer-box");
@@ -11,6 +16,7 @@ const playerBox = document.getElementById("player-box");
 async function startGame() {
   await placePlayerBoats();
   await placeComputerBoats();
+  removeRotateBtn();
   playerTurn();
 }
 

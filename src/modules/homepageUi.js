@@ -66,6 +66,12 @@ const rotateBoatBtn = () => {
   page.appendChild(btn);
 };
 
+function removeRotateBtn() {
+  const box = document.querySelector("body");
+  const rotateBtn = document.getElementById("btn-rotate-boat");
+  box.removeChild(rotateBtn);
+}
+
 const drawBoatOnGameBoard = () => {
   const box = document.getElementById("player-box");
   const boatsArea = player.boats;
@@ -98,4 +104,5 @@ export {
   drawBoatOnGameBoard,
   showHittedPos,
   showBullet,
+  removeRotateBtn,
 };
