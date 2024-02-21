@@ -78,8 +78,8 @@ const drawBoatOnGameBoard = () => {
   return;
 };
 
-function showHittedBoad(row, col) {
-  const box = document.getElementById("computer-box");
+function showHittedPos(row, col, id) {
+  const box = document.getElementById(id);
   const element = findElementByRowCol(box, row, col);
   element.style.backgroundColor = "var(--wrong)";
 }
@@ -96,6 +96,6 @@ export {
   renderPlayerBox,
   btnStartGame,
   drawBoatOnGameBoard,
-  showHittedBoad,
+  showHittedPos,
   showBullet,
 };
