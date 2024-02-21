@@ -2,14 +2,14 @@ import { placePlayerBoats } from "./handlePlayer";
 import { placeComputerBoats } from "./handleComputer";
 import { checkContainsAny } from "./utils/checkContainsAny";
 import { computerPlayer, gameSettings, player } from "./players";
-import { drawBoatOnGameBoard, showBullet, showHittedBoad } from "./homepageUi";
+import { drawBoatOnGameBoard, showBullet, showHittedPos } from "./homepageUi";
 import { findElementByRowCol } from "./utils/findElement";
 
 const computerBox = document.getElementById("computer-box");
 const playerBox = document.getElementById("player-box");
 
 async function startGame() {
-  //await placePlayerBoats();
+  await placePlayerBoats();
   await placeComputerBoats();
   playerTurn();
 }
@@ -26,13 +26,13 @@ function clickHandler(event) {
 }
 
 function playerClickHandler(hitPosition) {
-  if (checkContainsAny([hitPosition], gameSettings.allHits)) {
+  if (checkContainsAny([hitPosition], computerPlayer.gameBoardHits)) {
     console.log("already hit");
     return;
   }
 
   checkIfBoatHit(computerPlayer, hitPosition);
-  gameSettings.allHits.push(hitPosition);
+  computerPlayer.gameBoardHits.push(hitPosition);
   computerBox.removeEventListener("click", clickHandler);
 
   showBullet(computerBox, hitPosition[0], hitPosition[1]);
@@ -44,12 +44,12 @@ function computerTurn() {
   const randRow = Math.floor(Math.random() * 10);
   const randCol = Math.floor(Math.random() * 10);
 
-  if (checkContainsAny([[randRow, randCol]], gameSettings.allHits)) {
+  if (checkContainsAny([[randRow, randCol]], player.gameBoardHits)) {
     computerTurn();
     console.log("already hit");
     return;
   }
-
+  checkIfBoatHit(player, [randRow, randCol]);
   showBullet(playerBox, randRow, randCol);
   checkWin(player);
   playerTurn();
@@ -58,10 +58,8 @@ function computerTurn() {
 function checkIfBoatHit(player, hitPosition) {
   player.boats.forEach((boat) => {
     if (checkContainsAny([hitPosition], boat.position)) {
-      showHittedBoad(hitPosition[0], hitPosition[1]);
-      console.log("hitted", hitPosition[0], hitPosition[1]);
+      showHittedPos(hitPosition[0], hitPosition[1], player.gameBoardId);
       boat.hit();
-      console.log("boat", boat.hits);
     }
   });
 }
