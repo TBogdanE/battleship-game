@@ -50,6 +50,9 @@ body {
 }
 
 .box-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: var(--body);
   border: 0.2em solid var(--element);
   width: 1fr;
@@ -61,6 +64,13 @@ body {
   border: 0.3em solid var(--text2);
   border-radius: 8px;
   scale: 1.1;
+}
+
+.shoot-div {
+  width: 20%;
+  height: 20%;
+  border-radius: 50%;
+  background-color: black;
 }
 
 #btn-start-game {
