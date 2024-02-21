@@ -121,19 +121,12 @@ function handleHover(target, row, col, name, size, element, resolve) {
 
 //delete the style of the last hovered elements
 function handleHoverDeletion(row, col, size, element) {
-  if (ROTATION === VERTICAL) {
-    for (let i = 0; i < size; i++) {
-      element = findElementByRowCol(box, i + row, col);
-      element.style.backgroundColor = "transparent";
-    }
-    return;
-  } else if (ROTATION === HORIZONTAL) {
-    for (let i = 0; i < size; i++) {
-      element = findElementByRowCol(box, row, col + i);
-      element.style.backgroundColor = "transparent";
-    }
-    return;
+  const [, rowStep, colStep] = getRotation();
+  for (let i = 0; i < size; i++) {
+    element = findElementByRowCol(box, rowStep * i + row, colStep * i + col);
+    element.style.backgroundColor = "transparent";
   }
+  return;
 }
 
 export { placePlayerBoats };
