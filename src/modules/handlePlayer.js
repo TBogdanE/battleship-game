@@ -2,7 +2,12 @@ import { gameSettings, player, computerPlayer, Boat } from "./players";
 import { drawBoatOnGameBoard } from "./homepageUi";
 import { checkContainsAny } from "./utils/checkContainsAny";
 import { findElementByRowCol } from "./utils/findElement";
-import { VERTICAL, HORIZONTAL, getRotation } from "./utils/getRotation";
+import {
+  VERTICAL,
+  HORIZONTAL,
+  getRotation,
+  ROTATION,
+} from "./utils/getRotation";
 import { checkNearby } from "./handleComputer";
 
 const box = document.getElementById("player-box");
@@ -57,6 +62,7 @@ function checkValidPlace(resolve, name, size) {
 //handle hovering of the elements
 function handleHover(target, row, col, name, size, element, resolve) {
   let selectedPosition = [];
+  const [ROTATION, rowStep, colStep] = getRotation();
   let hoveredPosition = getPosition(row, col, size);
   let boatPosition = player.boatPositions();
 
@@ -93,16 +99,6 @@ function handleHover(target, row, col, name, size, element, resolve) {
   //and returns all the spaces it takes
   function getPosition(startRow, startCol, size) {
     let array = [];
-    let rowStep;
-    let colStep;
-
-    if (getRotation() === VERTICAL) {
-      rowStep = 1;
-      colStep = 0;
-    } else if (getRotation() === HORIZONTAL) {
-      rowStep = 0;
-      colStep = 1;
-    }
 
     for (let i = 0; i < size; i++) {
       const newRow = startRow + i * rowStep;
@@ -112,38 +108,26 @@ function handleHover(target, row, col, name, size, element, resolve) {
     return array;
   }
 
-  if (getRotation() === VERTICAL) {
-    if (
-      size + row > 10 ||
-      checkContainsAny(hoveredPosition, boatPosition) ||
-      checkNearby(hoveredPosition, boatPosition)
-    ) {
-      target.style.backgroundColor = "var(--wrong)";
-      return;
-    }
-    handleHoverStyle(size, row, col, 1, 0);
-  } else if (getRotation() === HORIZONTAL) {
-    if (
-      size + col > 10 ||
-      checkContainsAny(hoveredPosition, boatPosition) ||
-      checkNearby(hoveredPosition, boatPosition)
-    ) {
-      target.style.backgroundColor = "var(--wrong)";
-      return;
-    }
-    handleHoverStyle(size, row, col, 0, 1);
+  if (
+    size + row * rowStep + col * colStep > 10 ||
+    checkContainsAny(hoveredPosition, boatPosition) ||
+    checkNearby(hoveredPosition, boatPosition)
+  ) {
+    target.style.backgroundColor = "var(--wrong)";
+    return;
   }
+  handleHoverStyle(size, row, col, rowStep, colStep);
 }
 
 //delete the style of the last hovered elements
 function handleHoverDeletion(row, col, size, element) {
-  if (getRotation() === VERTICAL) {
+  if (ROTATION === VERTICAL) {
     for (let i = 0; i < size; i++) {
       element = findElementByRowCol(box, i + row, col);
       element.style.backgroundColor = "transparent";
     }
     return;
-  } else if (getRotation() === HORIZONTAL) {
+  } else if (ROTATION === HORIZONTAL) {
     for (let i = 0; i < size; i++) {
       element = findElementByRowCol(box, row, col + i);
       element.style.backgroundColor = "transparent";
