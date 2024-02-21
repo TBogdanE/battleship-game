@@ -84,10 +84,18 @@ function showHittedBoad(row, col) {
   element.style.backgroundColor = "var(--wrong)";
 }
 
+function showBullet(playerBox, row, col) {
+  const element = findElementByRowCol(playerBox, row, col);
+  const shoot = document.createElement("div");
+  shoot.classList.add("shoot-div");
+  element.appendChild(shoot);
+}
+
 export {
   renderComputerBox,
   renderPlayerBox,
   btnStartGame,
   drawBoatOnGameBoard,
   showHittedBoad,
+  showBullet,
 };
