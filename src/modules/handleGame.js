@@ -2,6 +2,7 @@ import { placePlayerBoats } from "./handlePlayer";
 import { placeComputerBoats } from "./handleComputer";
 import { checkContainsAny } from "./utils/checkContainsAny";
 import { computerPlayer, gameSettings, player } from "./players";
+import { drawBoatOnGameBoard, showHittedBoad } from "./homepageUi";
 
 const computerBox = document.getElementById("computer-box");
 const playerBox = document.getElementById("player-box");
@@ -19,20 +20,21 @@ function playerTurn() {
 function clickHandler(event) {
   const row = parseInt(event.target.getAttribute("row"));
   const col = parseInt(event.target.getAttribute("col"));
-  console.log([row, col]);
+  console.log("selected", [row, col]);
   playerClickHandler([row, col]);
 }
 
-function playerClickHandler(position) {
-  if (checkContainsAny([position], gameSettings.allHits)) {
+function playerClickHandler(hitPosition) {
+  if (checkContainsAny([hitPosition], gameSettings.allHits)) {
     console.log("already hit");
     return;
   }
 
-  checkIfBoatHit(computerPlayer, position);
-  gameSettings.allHits.push(position);
+  checkIfBoatHit(computerPlayer, hitPosition);
+  gameSettings.allHits.push(hitPosition);
   computerBox.removeEventListener("click", clickHandler);
   computerTurn();
+  checkWin(computerPlayer);
 }
 
 function computerTurn() {
@@ -40,16 +42,22 @@ function computerTurn() {
   playerTurn();
 }
 
-function checkWin(player) {}
+function checkWin(player) {
+  return player.boats.every((boat) => boat.isSunk());
+}
 
 function checkIfBoatHit(player, hitPosition) {
   player.boats.forEach((boat) => {
     //console.log("hp", hitPosition, "bp", boat.position);
     if (checkContainsAny([hitPosition], boat.position)) {
-      console.log("hitted");
+      showHittedBoad(hitPosition[0], hitPosition[1]);
+      console.log("hitted", hitPosition[0], hitPosition[1]);
       boat.hit();
+      console.log("boat", boat.hits);
+      return true;
     }
   });
+  return false;
 }
 
 export { startGame };
