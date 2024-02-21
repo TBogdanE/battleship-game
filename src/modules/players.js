@@ -1,6 +1,8 @@
 class Player {
   constructor() {
     this.boats = [];
+    this.gameBoardHits = [];
+    this.gameBoardId = "player-box";
   }
 
   boatPositions() {
@@ -17,6 +19,8 @@ class Player {
 class Computer {
   constructor() {
     this.boats = [];
+    this.gameBoardHits = [];
+    this.gameBoardId = "computer-box";
   }
 
   boatPositions() {
@@ -44,7 +48,7 @@ class Boat {
   }
 
   isSunk() {
-    return hits === this.size;
+    return this.hits === this.size;
   }
 }
 
@@ -53,6 +57,7 @@ class settings {
     this.size = 0;
     this.handleMouseOver = null;
     this.handleMouseOut = null;
+    this.allHits = [];
   }
 }
 
