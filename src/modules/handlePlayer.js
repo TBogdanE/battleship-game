@@ -7,7 +7,7 @@ import { checkNearby } from "./handleComputer";
 
 const box = document.getElementById("player-box");
 
-//makes user place boats in order
+//place boats in order
 async function placePlayerBoats() {
   return new Promise(async (resolve) => {
     await placeNewBoat("Carrier", 5);
@@ -20,17 +20,15 @@ async function placePlayerBoats() {
   });
 }
 
-//place carriere boat
+//handles the addition of the boats
 function placeNewBoat(name, size) {
   return new Promise((resolve) => {
     checkValidPlace(resolve, name, size);
   });
 }
 
-//checks if the place user want to add the boat is valid
+//checks if the place where user want to place the boat is valid
 function checkValidPlace(resolve, name, size) {
-  // const box = document.getElementById("player-box");
-
   //gets the area where the mouse hovers
   gameSettings.handleMouseOver = (event) => {
     const target = event.target;
@@ -51,48 +49,50 @@ function checkValidPlace(resolve, name, size) {
     handleHoverDeletion(row, col, size, element);
   };
 
+  //adds the event listeners
   box.addEventListener("mouseover", gameSettings.handleMouseOver);
   box.addEventListener("mouseout", gameSettings.handleMouseOut);
 }
 
-//applies style to the gameboard on hover
+//handle hovering of the elements
 function handleHover(target, row, col, name, size, element, resolve) {
-  let pos = [];
-  let position = getPosition(row, col, size);
+  let selectedPosition = [];
+  let hoveredPosition = getPosition(row, col, size);
   let boatPosition = player.boatPositions();
 
   drawBoatOnGameBoard();
 
   function handleClick() {
-    target.removeEventListener("click", handleClick);
     box.removeEventListener("mouseover", gameSettings.handleMouseOver);
     box.removeEventListener("mouseout", gameSettings.handleMouseOut);
-    addBoatToGameBoard(name, size, pos);
+    target.removeEventListener("click", handleClick);
+    addBoatToGameBoard(name, size, selectedPosition);
     resolve();
   }
 
   //place the boat on the gameboard
-  function addBoatToGameBoard(name, size, pos) {
-    const newBoat = new Boat(name, size, pos);
+  function addBoatToGameBoard(name, size, selectedPosition) {
+    const newBoat = new Boat(name, size, selectedPosition);
     player.boats.push(newBoat);
     drawBoatOnGameBoard();
-    //console.log("PlayerBoats:", player.boatPositions(), "Position", pos);
   }
 
+  //adds style to the elements, to create a virtual boat
   function handleHoverStyle(size, startRow, startCol, rowStep, colStep) {
     target.addEventListener("click", handleClick);
-
     for (let i = 0; i < size; i++) {
       const newRow = startRow + i * rowStep;
       const newCol = startCol + i * colStep;
-      pos.push([newRow, newCol]);
+      selectedPosition.push([newRow, newCol]);
       element = findElementByRowCol(box, newRow, newCol);
       element.style.backgroundColor = "var(--good-place-hover)";
     }
   }
 
+  //while hovering over an element, creates a virtual boat with it's size
+  //and returns all the spaces it takes
   function getPosition(startRow, startCol, size) {
-    let pos = [];
+    let array = [];
     let rowStep;
     let colStep;
 
@@ -107,16 +107,16 @@ function handleHover(target, row, col, name, size, element, resolve) {
     for (let i = 0; i < size; i++) {
       const newRow = startRow + i * rowStep;
       const newCol = startCol + i * colStep;
-      pos.push([newRow, newCol]);
+      array.push([newRow, newCol]);
     }
-    return pos;
+    return array;
   }
 
   if (getRotation() === VERTICAL) {
     if (
       size + row > 10 ||
-      checkContainsAny(position, boatPosition) ||
-      checkNearby(position, boatPosition)
+      checkContainsAny(hoveredPosition, boatPosition) ||
+      checkNearby(hoveredPosition, boatPosition)
     ) {
       target.style.backgroundColor = "var(--wrong)";
       return;
@@ -125,8 +125,8 @@ function handleHover(target, row, col, name, size, element, resolve) {
   } else if (getRotation() === HORIZONTAL) {
     if (
       size + col > 10 ||
-      checkContainsAny(position, boatPosition) ||
-      checkNearby(position, boatPosition)
+      checkContainsAny(hoveredPosition, boatPosition) ||
+      checkNearby(hoveredPosition, boatPosition)
     ) {
       target.style.backgroundColor = "var(--wrong)";
       return;
@@ -135,7 +135,7 @@ function handleHover(target, row, col, name, size, element, resolve) {
   }
 }
 
-//delete the style of the last visited elements
+//delete the style of the last hovered elements
 function handleHoverDeletion(row, col, size, element) {
   if (getRotation() === VERTICAL) {
     for (let i = 0; i < size; i++) {
