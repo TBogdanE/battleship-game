@@ -41,14 +41,14 @@ function playerClickHandler(hitPosition) {
 }
 
 function computerTurn() {
-  const randRow = Math.floor(Math.random() * 10);
-  const randCol = Math.floor(Math.random() * 10);
+  let randRow = Math.floor(Math.random() * 10);
+  let randCol = Math.floor(Math.random() * 10);
 
-  if (checkContainsAny([[randRow, randCol]], player.gameBoardHits)) {
-    computerTurn();
-    console.log("already hit");
-    return;
+  while (checkContainsAny([[randRow, randCol]], player.gameBoardHits)) {
+    randRow = Math.floor(Math.random() * 10);
+    randCol = Math.floor(Math.random() * 10);
   }
+  player.gameBoardHits.push([randRow, randCol]);
   checkIfBoatHit(player, [randRow, randCol]);
   showBullet(playerBox, randRow, randCol);
   checkWin(player);
