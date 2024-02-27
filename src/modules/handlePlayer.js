@@ -62,7 +62,7 @@ function checkValidPlace(resolve, name, size) {
 //handle hovering of the elements
 function handleHover(target, row, col, name, size, element, resolve) {
   const [ROTATION, rowStep, colStep] = getRotation();
-  let hoveredPosition = getPosition(row, col, size);
+  let hoveredPosition = getPosition();
   let boatPosition = player.boatPositions();
 
   drawBoatOnGameBoard();
@@ -95,12 +95,12 @@ function handleHover(target, row, col, name, size, element, resolve) {
 
   //while hovering over an element, creates a virtual boat with it's size
   //and returns all the spaces it takes
-  function getPosition(startRow, startCol, size) {
+  function getPosition() {
     let array = [];
 
     for (let i = 0; i < size; i++) {
-      const newRow = startRow + i * rowStep;
-      const newCol = startCol + i * colStep;
+      const newRow = row + i * rowStep;
+      const newCol = col + i * colStep;
       array.push([newRow, newCol]);
     }
     return array;
