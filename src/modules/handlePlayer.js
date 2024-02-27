@@ -83,11 +83,11 @@ function handleHover(target, row, col, name, size, element, resolve) {
   }
 
   //adds style to the elements, to create a virtual boat
-  function handleHoverStyle(size, startRow, startCol, rowStep, colStep) {
+  function handleHoverStyle() {
     target.addEventListener("click", handleClick);
     for (let i = 0; i < size; i++) {
-      const newRow = startRow + i * rowStep;
-      const newCol = startCol + i * colStep;
+      const newRow = row + i * rowStep;
+      const newCol = col + i * colStep;
       element = findElementByRowCol(box, newRow, newCol);
       element.style.backgroundColor = "var(--good-place-hover)";
     }
@@ -114,7 +114,7 @@ function handleHover(target, row, col, name, size, element, resolve) {
     target.style.backgroundColor = "var(--wrong)";
     return;
   }
-  handleHoverStyle(size, row, col, rowStep, colStep);
+  handleHoverStyle();
 }
 
 //delete the style of the last hovered elements
