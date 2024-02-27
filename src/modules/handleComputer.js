@@ -6,6 +6,7 @@ import { checkNearby } from "./utils/checkNearby";
 
 const box = document.getElementById("computer-box");
 
+//place computer boats in order
 async function placeComputerBoats() {
   return new Promise(async (resolve) => {
     await placeNewBoat("Carrier", 5);
@@ -18,24 +19,23 @@ async function placeComputerBoats() {
   });
 }
 
-//place carriere boat
+//handles the addition of boats
 function placeNewBoat(name, size) {
   return new Promise((resolve) => {
     checkValidPlace(resolve, name, size);
   });
 }
-
+//checks if the place where coomputer want to place the boat is valid
 function checkValidPlace(resolve, name, size) {
-  let step = 0;
   let position = randomPosition(size);
   let computerBoats = computerPlayer.boatPositions();
   console.log("position", position, "comp", computerBoats);
 
+  //while the position isn't valid, search for a valid one
   while (
     checkContainsAny(position, computerBoats) ||
     checkNearby(position, computerBoats)
   ) {
-    if (step > 100) return;
     position = randomPosition(size);
     step += 1;
   }
@@ -44,13 +44,15 @@ function checkValidPlace(resolve, name, size) {
   computerPlayer.boats.push(newBoat);
 
   //temporary !!!!!!!!!!!!!
-  for (let element of position) {
+  //SHOWS COMPUTER BOATS
+  /*for (let element of position) {
     const e = findElementByRowCol(box, element[0], element[1]);
     e.style.backgroundColor = "var(--good-place-hover)";
-  }
+  }*/
   resolve();
 }
 
+//returns random position for boat placement
 function randomPosition(size) {
   let arr = [];
   let subRow, subCol;
@@ -77,6 +79,7 @@ function randomPosition(size) {
   return arr;
 }
 
+//returns random rotation
 function randomRotation() {
   const randomNumber = Math.random();
   let rotation, rowStep, colStep;

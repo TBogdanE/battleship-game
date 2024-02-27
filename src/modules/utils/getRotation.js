@@ -4,6 +4,7 @@ let ROTATION = VERTICAL;
 let rowStep = 0;
 let colStep = 0;
 
+//returns actual rotation of the boat
 const getRotation = (data = null) => {
   if (data !== null || data === VERTICAL || data === HORIZONTAL)
     ROTATION = data;

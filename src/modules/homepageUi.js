@@ -8,6 +8,7 @@ import {
 } from "./utils/getRotation";
 import { startGame } from "./handleGame";
 
+//create player box
 const renderPlayerBox = () => {
   const box = document.getElementById("player-box");
   for (let i = 0; i < 10; i++) {
@@ -22,6 +23,7 @@ const renderPlayerBox = () => {
   }
 };
 
+//create computer box
 const renderComputerBox = () => {
   const box = document.getElementById("computer-box");
   for (let i = 0; i < 10; i++) {
@@ -36,11 +38,13 @@ const renderComputerBox = () => {
   }
 };
 
+//create start game button
 const btnStartGame = () => {
   const page = document.querySelector("body");
   const button = document.getElementById("btn-start-game");
   const handleBtn = () => {
     startGame();
+    //after starting the game, hides the start button
     if (page.contains(button)) {
       page.removeChild(button);
       button.removeEventListener("click", handleBtn);
@@ -51,6 +55,7 @@ const btnStartGame = () => {
   button.addEventListener("click", handleBtn);
 };
 
+//create the rotate boat button
 const rotateBoatBtn = () => {
   const page = document.querySelector("body");
   const btn = document.createElement("button");
@@ -66,12 +71,14 @@ const rotateBoatBtn = () => {
   page.appendChild(btn);
 };
 
+//removes the rotate button
 function removeRotateBtn() {
   const box = document.querySelector("body");
   const rotateBtn = document.getElementById("btn-rotate-boat");
   box.removeChild(rotateBtn);
 }
 
+//draws the boats on the gameboard
 const drawBoatOnGameBoard = () => {
   const box = document.getElementById("player-box");
   const boatsArea = player.boats;
@@ -84,12 +91,14 @@ const drawBoatOnGameBoard = () => {
   return;
 };
 
+//show with red on shooted boats
 function showHittedPos(row, col, id) {
   const box = document.getElementById(id);
   const element = findElementByRowCol(box, row, col);
   element.style.backgroundColor = "var(--wrong)";
 }
 
+//draws the bullet on the gameboard
 function showBullet(playerBox, row, col) {
   const element = findElementByRowCol(playerBox, row, col);
   const shoot = document.createElement("div");

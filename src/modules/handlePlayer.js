@@ -1,13 +1,8 @@
-import { gameSettings, player, computerPlayer, Boat } from "./players";
+import { gameSettings, player, Boat } from "./players";
 import { drawBoatOnGameBoard } from "./homepageUi";
 import { checkContainsAny } from "./utils/checkContainsAny";
 import { findElementByRowCol } from "./utils/findElement";
-import {
-  VERTICAL,
-  HORIZONTAL,
-  getRotation,
-  ROTATION,
-} from "./utils/getRotation";
+import { getRotation } from "./utils/getRotation";
 import { checkNearby } from "./handleComputer";
 
 const box = document.getElementById("player-box");
@@ -61,18 +56,27 @@ function checkValidPlace(resolve, name, size) {
 
 //handle hovering of the elements
 function handleHover(target, row, col, name, size, element, resolve) {
-  const [ROTATION, rowStep, colStep] = getRotation();
+  const [, rowStep, colStep] = getRotation();
   let hoveredPosition = getPosition();
   let boatPosition = player.boatPositions();
-
   drawBoatOnGameBoard();
+
+  if (
+    size + row * rowStep + col * colStep > 10 ||
+    checkContainsAny(hoveredPosition, boatPosition) ||
+    checkNearby(hoveredPosition, boatPosition)
+  ) {
+    target.style.backgroundColor = "var(--wrong)";
+    return;
+  }
+  handleHoverStyle();
 
   function handleClick() {
     box.removeEventListener("mouseover", gameSettings.handleMouseOver);
     box.removeEventListener("mouseout", gameSettings.handleMouseOut);
     target.removeEventListener("click", handleClick);
     addBoatToGameBoard();
-    setTimeout(() => resolve(), 100);
+    setTimeout(() => resolve(), 300);
   }
 
   //place the boat on the gameboard
@@ -91,8 +95,8 @@ function handleHover(target, row, col, name, size, element, resolve) {
     }
   }
 
-  //while hovering over an element, creates a virtual boat with it's size
-  //and returns all the spaces it takes
+  //while hovering over an element, creates a virtual boat with it's
+  //positions and returns all the spaces it takes
   function getPosition() {
     let array = [];
     for (let i = 0; i < size; i++) {
@@ -102,17 +106,6 @@ function handleHover(target, row, col, name, size, element, resolve) {
     }
     return array;
   }
-
-  if (
-    size + row * rowStep + col * colStep > 10 ||
-    checkContainsAny(hoveredPosition, boatPosition) ||
-    checkNearby(hoveredPosition, boatPosition)
-  ) {
-    target.style.backgroundColor = "var(--wrong)";
-    setTimeout(1000);
-    return;
-  }
-  handleHoverStyle();
 }
 
 //delete the style of the last hovered elements
