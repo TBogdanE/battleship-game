@@ -85,10 +85,8 @@ function handleHover(target, row, col, name, size, element, resolve) {
   //adds style to the elements, to create a virtual boat
   function handleHoverStyle() {
     target.addEventListener("click", handleClick);
-    for (let i = 0; i < size; i++) {
-      const newRow = row + i * rowStep;
-      const newCol = col + i * colStep;
-      element = findElementByRowCol(box, newRow, newCol);
+    for (let pos of hoveredPosition) {
+      element = findElementByRowCol(box, pos[0], pos[1]);
       element.style.backgroundColor = "var(--good-place-hover)";
     }
   }
@@ -97,7 +95,6 @@ function handleHover(target, row, col, name, size, element, resolve) {
   //and returns all the spaces it takes
   function getPosition() {
     let array = [];
-
     for (let i = 0; i < size; i++) {
       const newRow = row + i * rowStep;
       const newCol = col + i * colStep;
