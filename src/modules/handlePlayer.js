@@ -72,7 +72,7 @@ function handleHover(target, row, col, name, size, element, resolve) {
     box.removeEventListener("mouseout", gameSettings.handleMouseOut);
     target.removeEventListener("click", handleClick);
     addBoatToGameBoard();
-    resolve();
+    setTimeout(() => resolve(), 100);
   }
 
   //place the boat on the gameboard
@@ -109,6 +109,7 @@ function handleHover(target, row, col, name, size, element, resolve) {
     checkNearby(hoveredPosition, boatPosition)
   ) {
     target.style.backgroundColor = "var(--wrong)";
+    setTimeout(1000);
     return;
   }
   handleHoverStyle();
