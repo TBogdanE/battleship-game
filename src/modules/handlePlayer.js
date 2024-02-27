@@ -61,7 +61,6 @@ function checkValidPlace(resolve, name, size) {
 
 //handle hovering of the elements
 function handleHover(target, row, col, name, size, element, resolve) {
-  let selectedPosition = [];
   const [ROTATION, rowStep, colStep] = getRotation();
   let hoveredPosition = getPosition(row, col, size);
   let boatPosition = player.boatPositions();
@@ -72,13 +71,13 @@ function handleHover(target, row, col, name, size, element, resolve) {
     box.removeEventListener("mouseover", gameSettings.handleMouseOver);
     box.removeEventListener("mouseout", gameSettings.handleMouseOut);
     target.removeEventListener("click", handleClick);
-    addBoatToGameBoard(name, size, selectedPosition);
+    addBoatToGameBoard(name, size, hoveredPosition);
     resolve();
   }
 
   //place the boat on the gameboard
-  function addBoatToGameBoard(name, size, selectedPosition) {
-    const newBoat = new Boat(name, size, selectedPosition);
+  function addBoatToGameBoard(name, size, hoveredPosition) {
+    const newBoat = new Boat(name, size, hoveredPosition);
     player.boats.push(newBoat);
     drawBoatOnGameBoard();
   }
@@ -89,7 +88,6 @@ function handleHover(target, row, col, name, size, element, resolve) {
     for (let i = 0; i < size; i++) {
       const newRow = startRow + i * rowStep;
       const newCol = startCol + i * colStep;
-      selectedPosition.push([newRow, newCol]);
       element = findElementByRowCol(box, newRow, newCol);
       element.style.backgroundColor = "var(--good-place-hover)";
     }
