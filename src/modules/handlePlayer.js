@@ -71,12 +71,12 @@ function handleHover(target, row, col, name, size, element, resolve) {
     box.removeEventListener("mouseover", gameSettings.handleMouseOver);
     box.removeEventListener("mouseout", gameSettings.handleMouseOut);
     target.removeEventListener("click", handleClick);
-    addBoatToGameBoard(name, size, hoveredPosition);
+    addBoatToGameBoard();
     resolve();
   }
 
   //place the boat on the gameboard
-  function addBoatToGameBoard(name, size, hoveredPosition) {
+  function addBoatToGameBoard() {
     const newBoat = new Boat(name, size, hoveredPosition);
     player.boats.push(newBoat);
     drawBoatOnGameBoard();
